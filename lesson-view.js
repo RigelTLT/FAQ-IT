@@ -15,7 +15,7 @@ function renderLesson(id) {
       <div class="lesson-meta"><span>◷ 20–30 минут на изучение</span><span>◇ ${lesson.terms.length} понятий</span></div>
     </section>
     <article class="article detailed-article">
-      <div class="reader-note"><strong>Впервые в IT?</strong><span>Читайте по порядку. Незнакомый термин можно открыть в разделе «Словарь» ниже. После чтения попробуйте объяснить тему своими словами.</span></div>
+      <div class="reader-note"><strong>Впервые в IT?</strong><span>Читайте по порядку. Незнакомые понятия раскрываются прямо в уроке, в разделе «Понятия этой темы». После чтения попробуйте объяснить тему своими словами.</span></div>
       <section class="article-block">
         <span class="article-number">01 / ПРОСТЫМИ СЛОВАМИ</span>
         <h2>Что это такое</h2>
@@ -35,8 +35,12 @@ function renderLesson(id) {
       <section class="article-block">
         <span class="article-number">04 / СЛОВАРЬ</span>
         <h2>Понятия этой темы</h2>
-        <p>Откройте любое понятие, чтобы увидеть его определение и другие связанные темы.</p>
-        <div class="term-grid">${lesson.terms.map(termLink).join('')}</div>
+        <p>Нажмите на название, чтобы прочитать определение здесь, не покидая урок.</p>
+        <div class="term-list-toolbar"><span>${lesson.terms.length} понятий</span><button id="toggle-all-terms" type="button" aria-controls="lesson-terms" aria-expanded="false">Раскрыть все</button></div>
+        <div class="lesson-term-list" id="lesson-terms">${lesson.terms.map(termId => {
+          const term = glossaryById.get(termId);
+          return `<details class="lesson-term" data-term-id="${esc(termId)}"><summary><span>${esc(term.title)}</span><span class="term-chevron" aria-hidden="true">⌄</span></summary><div class="lesson-term-body"><p>${esc(term.description)}</p><a href="#/glossary/${termId}">Открыть карточку в словаре ↗</a></div></details>`;
+        }).join('')}</div>
       </section>
       <section class="article-block">
         <span class="article-number">05 / ЧАСТЫЕ ОШИБКИ</span>
@@ -71,4 +75,17 @@ function renderLesson(id) {
     renderNav(lesson.stage);
     renderLesson(id);
   });
+  const termItems = [...byId('lesson-terms').querySelectorAll('details')];
+  const toggleAll = byId('toggle-all-terms');
+  const syncToggleAll = () => {
+    const allOpen = termItems.every(item => item.open);
+    toggleAll.textContent = allOpen ? 'Свернуть все' : 'Раскрыть все';
+    toggleAll.setAttribute('aria-expanded', String(allOpen));
+  };
+  toggleAll.addEventListener('click', () => {
+    const open = !termItems.every(item => item.open);
+    termItems.forEach(item => { item.open = open; });
+    syncToggleAll();
+  });
+  termItems.forEach(item => item.addEventListener('toggle', syncToggleAll));
 }
