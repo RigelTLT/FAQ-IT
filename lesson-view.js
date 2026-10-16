@@ -39,7 +39,7 @@ function renderLesson(id) {
         <div class="term-list-toolbar"><span>${lesson.terms.length} понятий</span><button id="toggle-all-terms" type="button" aria-controls="lesson-terms" aria-expanded="false">Раскрыть все</button></div>
         <div class="lesson-term-list" id="lesson-terms">${lesson.terms.map(termId => {
           const term = glossaryById.get(termId);
-          return `<details class="lesson-term" data-term-id="${esc(termId)}"><summary><span>${esc(term.title)}</span><span class="term-chevron" aria-hidden="true">⌄</span></summary><div class="lesson-term-body"><p>${esc(term.description)}</p><a href="#/glossary/${termId}">Открыть карточку в словаре ↗</a></div></details>`;
+          return `<details class="lesson-term" data-term-id="${esc(termId)}"><summary><span>${esc(term.title)}</span><span class="term-chevron" aria-hidden="true">⌄</span></summary><div class="lesson-term-body"><p>${esc(term.description)}</p>${termExampleMarkup(termId, true)}<a href="#/glossary/${termId}">Открыть карточку в словаре ↗</a></div></details>`;
         }).join('')}</div>
       </section>
       <section class="article-block">
