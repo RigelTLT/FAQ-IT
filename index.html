@@ -3,34 +3,33 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#101a24">
-  <meta name="description" content="Открытый справочник программного архитектора: маршрут обучения, темы, практика и словарь терминов.">
-  <title>Архитектура ПО — открытый справочник</title>
-  <link rel="stylesheet" href="styles.css">
+  <meta name="theme-color" content="#101923">
+  <meta name="description" content="Полный практический курс тимлида: команда, люди, процессы, инженерное качество, продукт и результат. Архив курса архитектора доступен отдельно.">
+  <title>Тимлид — практический курс</title>
+  <link rel="stylesheet" href="teamlead.css">
 </head>
 <body>
-  <a class="skip-link" href="#main">К содержанию</a>
-  <div class="app-shell">
-    <aside class="sidebar" id="sidebar" aria-label="Навигация">
-      <a class="brand" href="#/" aria-label="На главную"><span class="brand-mark">A<span>↗</span></span><span>АРХИТЕКТУРА<span class="brand-sub">от основ к решениям</span></span></a>
-      <div class="sidebar-section-label">ИЗУЧЕНИЕ</div>
-      <nav id="stage-nav" aria-label="Этапы обучения"></nav>
-      <div class="sidebar-divider"></div>
-      <a class="side-link" href="#/glossary"><span>◇</span> Словарь терминов <span class="side-count" id="term-count"></span></a>
-      <a class="side-link" href="#/about"><span>↗</span> О проекте</a>
-      <div class="sidebar-bottom"><span class="status-dot"></span> Открытый учебный справочник<br><small>Данные хранятся в вашем браузере</small></div>
+  <a class="skip" href="#main">К содержанию</a>
+  <div class="shell">
+    <aside class="sidebar" id="sidebar" aria-label="Навигация по курсу">
+      <a class="brand" href="#/"><span class="brand-icon">TL<span>↗</span></span><span>ТИМЛИД<small>от разработчика к лидеру</small></span></a>
+      <div class="nav-label">ОСНОВНОЙ КУРС</div>
+      <a class="side-link" href="#/" data-nav="home">⌂ <span>Обзор программы</span></a>
+      <nav id="track-nav" aria-label="Направления курса"></nav>
+      <div class="sidebar-separator"></div>
+      <a class="side-link" href="#/final" data-nav="final">✦ <span>Итоговая работа</span></a>
+      <a class="side-link" href="#/resources" data-nav="resources">▤ <span>Шаблоны и инструменты</span></a>
+      <div class="nav-label archive-label">ДОПОЛНИТЕЛЬНО</div>
+      <a class="side-link archive-link" href="archive/index.html">↗ <span>Архив: архитектор ПО</span></a>
+      <div class="sidebar-note">Прогресс хранится в этом браузере.<br>Отмечайте урок после выполнения практики.</div>
     </aside>
     <div class="main-column">
-      <header class="topbar"><button class="menu-button" id="menu-button" aria-label="Открыть меню" aria-expanded="false">☰</button><div class="breadcrumbs" id="breadcrumbs">Главная <span>/</span> Маршрут</div><a class="topbar-link" href="#/glossary">Словарь <span>↗</span></a></header>
+      <header class="topbar"><button class="menu-button" id="menu-button" aria-expanded="false" aria-controls="sidebar" aria-label="Открыть меню">☰</button><div class="breadcrumbs" id="breadcrumbs"></div><a class="topbar-archive" href="archive/index.html">Архив архитектора ↗</a></header>
       <main id="main" tabindex="-1"></main>
-      <footer class="footer"><span>Архитектура ПО · открытый справочник</span><span>Учитесь последовательно. Возвращайтесь к терминам.</span></footer>
+      <footer class="footer"><span>ТИМЛИД · практический курс</span><span>Учитесь на рабочем кейсе и собирайте портфолио решений.</span></footer>
     </div>
   </div>
-  <script src="data.js"></script>
-  <script src="detailed.js"></script>
-  <script src="term-examples.js"></script>
-  <script src="lesson-view.js"></script>
-  <script src="glossary-view.js"></script>
-  <script src="app.js"></script>
+  <script src="teamlead-data.js"></script>
+  <script src="teamlead-app.js"></script>
 </body>
 </html>
