@@ -1,0 +1,164 @@
+[
+  {
+    "event_id": "evt-1",
+    "cursor": 1,
+    "source": "ut_demo",
+    "entity_key": "A:1",
+    "entity_version": 1,
+    "operation": "upsert",
+    "payload": {
+      "document_id": "A",
+      "line_no": 1,
+      "org_id": "ORG1",
+      "customer_id": "C001",
+      "product_id": "P001",
+      "sale_date": "2026-11-02",
+      "amount_kopecks": 10000,
+      "posted": true
+    }
+  },
+  {
+    "event_id": "evt-2",
+    "cursor": 2,
+    "source": "ut_demo",
+    "entity_key": "A2:1",
+    "entity_version": 1,
+    "operation": "upsert",
+    "payload": {
+      "document_id": "A2",
+      "line_no": 1,
+      "org_id": "ORG1",
+      "customer_id": "C001",
+      "product_id": "P001",
+      "sale_date": "2026-11-02",
+      "amount_kopecks": 5000,
+      "posted": true
+    }
+  },
+  {
+    "event_id": "evt-3",
+    "cursor": 3,
+    "source": "ut_demo",
+    "entity_key": "B:1",
+    "entity_version": 1,
+    "operation": "upsert",
+    "payload": {
+      "document_id": "B",
+      "line_no": 1,
+      "org_id": "ORG2",
+      "customer_id": "C002",
+      "product_id": "P001",
+      "sale_date": "2026-11-02",
+      "amount_kopecks": 7000,
+      "posted": true
+    }
+  },
+  {
+    "event_id": "evt-4",
+    "cursor": 4,
+    "source": "ut_demo",
+    "entity_key": "RETURN:1",
+    "entity_version": 1,
+    "operation": "upsert",
+    "payload": {
+      "document_id": "RETURN",
+      "line_no": 1,
+      "org_id": "ORG1",
+      "customer_id": "C001",
+      "product_id": "P001",
+      "sale_date": "2026-11-02",
+      "amount_kopecks": -2000,
+      "posted": true
+    }
+  },
+  {
+    "event_id": "evt-5",
+    "cursor": 5,
+    "source": "ut_demo",
+    "entity_key": "A:1",
+    "entity_version": 2,
+    "operation": "upsert",
+    "payload": {
+      "document_id": "A",
+      "line_no": 1,
+      "org_id": "ORG1",
+      "customer_id": "C001",
+      "product_id": "P001",
+      "sale_date": "2026-11-02",
+      "amount_kopecks": 12000,
+      "posted": true
+    }
+  },
+  {
+    "event_id": "evt-6",
+    "cursor": 6,
+    "source": "ut_demo",
+    "entity_key": "B:1",
+    "entity_version": 2,
+    "operation": "delete",
+    "payload": {
+      "document_id": "B",
+      "line_no": 1,
+      "org_id": "ORG2",
+      "customer_id": "C002",
+      "product_id": "P001",
+      "sale_date": "2026-11-02",
+      "amount_kopecks": 7000,
+      "posted": true
+    }
+  },
+  {
+    "event_id": "evt-7",
+    "cursor": 7,
+    "source": "ut_demo",
+    "entity_key": "LATE:1",
+    "entity_version": 1,
+    "operation": "upsert",
+    "payload": {
+      "document_id": "LATE",
+      "line_no": 1,
+      "org_id": "ORG2",
+      "customer_id": "C002",
+      "product_id": "P001",
+      "sale_date": "2026-11-01",
+      "amount_kopecks": 3000,
+      "posted": true
+    }
+  },
+  {
+    "event_id": "evt-8",
+    "cursor": 8,
+    "source": "ut_demo",
+    "entity_key": "A2:1",
+    "entity_version": 2,
+    "operation": "upsert",
+    "payload": {
+      "document_id": "A2",
+      "line_no": 1,
+      "org_id": "ORG1",
+      "customer_id": "C001",
+      "product_id": "P001",
+      "sale_date": "2026-11-02",
+      "amount_kopecks": 5000,
+      "posted": false
+    }
+  },
+  {
+    "event_id": "evt-9",
+    "cursor": 9,
+    "source": "ut_demo",
+    "entity_key": "A:1",
+    "entity_version": 1,
+    "operation": "upsert",
+    "payload": {
+      "document_id": "A",
+      "line_no": 1,
+      "org_id": "ORG1",
+      "customer_id": "C001",
+      "product_id": "P001",
+      "sale_date": "2026-11-02",
+      "amount_kopecks": 10000,
+      "posted": true
+    }
+  }
+]

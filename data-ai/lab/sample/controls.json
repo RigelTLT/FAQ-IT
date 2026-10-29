@@ -1,0 +1,10 @@
+{
+  "active_lines": 3,
+  "net_revenue_kopecks": 13000,
+  "by_org": {
+    "ORG1": 10000,
+    "ORG2": 3000
+  },
+  "checkpoint": 9,
+  "explanation": "A v2 12000 + RETURN -2000 + LATE 3000; B deleted, A2 unposted; A v1 ignored"
+}

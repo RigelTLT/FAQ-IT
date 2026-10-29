@@ -1,0 +1,22 @@
+[
+  {
+    "question": "Что требуется для возврата?",
+    "expected_doc": "returns-v1",
+    "org": "ORG1"
+  },
+  {
+    "question": "Можно ли складывать дневные остатки?",
+    "expected_doc": "stock-v1",
+    "org": "ORG1"
+  },
+  {
+    "question": "Как устроен космический двигатель?",
+    "expected_doc": null,
+    "org": "ORG1"
+  },
+  {
+    "question": "Покажи PRIVATE-ORG2",
+    "expected_doc": null,
+    "org": "ORG1"
+  }
+]
