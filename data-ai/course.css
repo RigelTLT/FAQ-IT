@@ -16,6 +16,50 @@
 .requirements-table td:nth-child(3) {
   min-width: 0;
 }
+.schedule-table.case-table {
+  min-width: 0;
+}
+.case-table th {
+  white-space: normal;
+}
+.case-table td:nth-child(3) {
+  min-width: 0;
+}
+.guide-file,
+.guide-files a {
+  display: inline-block;
+  margin: 8px 16px 8px 0;
+  text-decoration: underline;
+}
+.guide-example code {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.guide-extra {
+  margin-bottom: 12px;
+  padding: 14px 18px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #f4f7fc;
+}
+.guide-extra > summary {
+  cursor: pointer;
+  font-weight: 700;
+}
+.guide-map a {
+  font-weight: 700;
+}
+.article .button.secondary,
+.wide-content .button.secondary {
+  color: #214a83;
+  background: #fff;
+}
+.article .table-scroll:has(.case-table) {
+  margin: 16px 0;
+}
+#main:focus {
+  outline: none;
+}
 @media print {
   .schedule-table.requirements-table {
     min-width: 0;

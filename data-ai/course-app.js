@@ -45,11 +45,12 @@
   const dateText = value => new Date(value+'T12:00:00Z').toLocaleDateString('ru-RU',{day:'2-digit',month:'2-digit',year:'numeric',timeZone:'UTC'});
   const dayText = value => new Date(value+'T12:00:00Z').toLocaleDateString('ru-RU',{weekday:'short',timeZone:'UTC'});
   const xlsxLink = '../outputs/python-bi-ai-1c-2026/learning-plan.xlsx';
-  const lessonLink = id => `<a href="#/lesson/${id}">${esc(lessons.get(id).title)}</a>`;
+  const lessonLink = id => `<a href="#/lesson/${id}">${esc(C.guide[id].title)}</a>`;
   function sourceList(ids) { return `<ul class="source-list">${ids.map(id => C.sources[id]).filter(Boolean).map(([title,url])=>`<li><a href="${esc(url)}" target="_blank" rel="noreferrer">${esc(title)} ↗</a></li>`).join('')}</ul>`; }
   function card(l) {
     const index = mainLessons.indexOf(l)+1;
-    return `<a class="lesson-card" href="#/lesson/${l.id}"><span class="lesson-num">${index?String(index).padStart(2,'0'):'+'}</span><span class="lesson-card-copy"><strong>${esc(l.title)}</strong><small>${esc(l.summary)}</small></span><span class="lesson-done ${state.completed.includes(l.id)?'done':''}" aria-label="${state.completed.includes(l.id)?'Пройден':'Ещё не пройден'}">${state.completed.includes(l.id)?'✓':'↗'}</span></a>`;
+    const guide = C.guide[l.id];
+    return `<a class="lesson-card" href="#/lesson/${l.id}"><span class="lesson-num">${index?String(index).padStart(2,'0'):'+'}</span><span class="lesson-card-copy"><strong>${esc(guide.title)}</strong><small>${esc(guide.question)}</small></span><span class="lesson-done ${state.completed.includes(l.id)?'done':''}" aria-label="${state.completed.includes(l.id)?'Пройден':'Ещё не пройден'}">${state.completed.includes(l.id)?'✓':'↗'}</span></a>`;
   }
   function nav(active) {
     $('track-nav').innerHTML = C.modules.map((m,i)=> {
@@ -67,15 +68,15 @@
     const gatesDone = C.modules.filter(m=>state.gates[m.id]==='Готово').length;
     const percent = Math.round(done / mainLessons.length *100);
     $('breadcrumbs').textContent = 'Главная / Python, BI, AI и 1С';
-    $('main').innerHTML = `<section class="hero"><h1>Python для<br><em>BI &amp; AI Team Lead</em></h1><p>Научитесь читать Python-проект, проверять код и проектировать контур 1С, Битрикс24, BI и AI для личного кабинета. Разбирайте примеры, прогнозируйте результат до запуска и доказывайте решения тестами.</p><div class="hero-actions"><a class="button primary" href="${nextPath}">${next?(done||gatesDone?'Продолжить':'Начать обучение'):'К итоговому проекту'} ↗</a><a class="button secondary" href="#/schedule">Расписание и Excel</a></div><div class="meta-pills"><span>${dateText(schedule[0].date)} — ${dateText(schedule.at(-1).date)}</span><span>${schedule.reduce((s,d)=>s+d.hours,0)} часов по плану</span><span>55 дней по вашему графику + 5 дней на защиту</span></div></section>
+    $('main').innerHTML = `<section class="hero"><h1>Python для<br><em>BI &amp; AI Team Lead</em></h1><p>Один проект на весь курс. Узнаем, как запись об отправлении превращается в цифру в отчёте, а вопрос клиента — в обращение и ответ со ссылкой на регламент.</p><div class="hero-actions"><a class="button primary" href="${nextPath}">${next?(done||gatesDone?'Продолжить':'Начать обучение'):'К итоговому проекту'} ↗</a><a class="button secondary" href="#/project">Сначала посмотреть проект</a></div><div class="meta-pills"><span>${dateText(schedule[0].date)} — ${dateText(schedule.at(-1).date)}</span><span>${schedule.reduce((s,d)=>s+d.hours,0)} часов по плану</span><span>55 дней по вашему графику + 5 дней на защиту</span></div></section>
     <section class="progress"><div><span class="kicker">ВАШ ПРОГРЕСС</span><strong>${done}<small> / ${mainLessons.length}</small></strong><p>уроков отмечено после практики</p></div><div class="progress-side"><b>${percent}% уроков · ${gatesDone}/${C.modules.length} практикумов</b><div class="bar"><span style="width:${percent}%"></span></div><small>${esc(storageWarning || 'Отметки и заметки сохраняются в этом браузере.')}</small></div></section>
-    <section class="section"><div class="section-heading"><div><span class="kicker">КАК УЧИТЬСЯ</span><h2>Интенсив с проверкой результата</h2></div></div><div class="course-intro"><div><h3>Исходный уровень</h3><p>Начните с типов, условий, коллекций, функций и исключений. Во втором этапе откройте существующий репозиторий, найдите точку входа и проследите запуск до записи в базу.</p></div><div><h3>Нагрузка</h3><p>В будни — 7 часов как середина ваших 6–8. В выходные — условные 4 часа, их можно изменить. На теорию отведено около 25%, практику 55%, повтор и проверку 20%. Делайте перерывы между рабочими блоками.</p></div><div><h3>Один основной стек</h3><p>Основной путь проходит через PostgreSQL, Prefect, FastAPI, один BI, scikit-learn и RAG. Airflow, другие BI и нейросети сравнивайте на тех же данных. Пример Django доступен в модуле API для справки.</p></div><div><h3>Каждый пятый день</h3><p>Объясните поток данных, соберите результат этапа и отревьюйте одно рискованное изменение. Сохраните проверку, по которой коллега сможет воспроизвести результат.</p></div></div></section>
-    <section class="section"><div class="section-heading"><div><span class="kicker">ПРОГРАММА</span><h2>Программа по вашему графику</h2></div><p>11 этапов до 26 декабря и отдельный блок защиты. <a href="#/requirements">Сверить с требованиями к роли</a></p></div><label class="searchbox"><span>Поиск по урокам, объяснениям и коду</span><input id="course-search" type="search" placeholder="Например: traceback, SCD2, OData, Битрикс24…"></label><div id="search-results" class="search-results" aria-live="polite"></div><div class="track-grid" id="modules-grid">${C.modules.map((m,i)=>`<a class="track-card" href="#/module/${m.id}"><span class="track-card-top">${m.extension?'ЗАЩИТА':'ЭТАП '+String(i+1).padStart(2,'0')}<span>↗</span></span><strong>${esc(m.title)}</strong><p>${esc(m.subtitle)}</p><span class="track-card-bottom">4 урока + практикум · ${esc(m.outcome)}</span></a>`).join('')}</div></section>`;
+    <section class="section"><div class="section-heading"><div><span class="kicker">КАК УЧИТЬСЯ</span><h2>Как читать курс</h2></div></div><div class="course-intro"><div><h3>Исходный уровень</h3><p>В первой выгрузке три строки. Проследите, как программа читает статус одной посылки, считает сводку и реагирует на исправление. <a href="#/project">Посмотреть данные и ожидаемый результат</a>.</p></div><div><h3>Нагрузка</h3><p>В будни — 7 часов как середина ваших 6–8. В выходные — условные 4 часа, их можно изменить. На теорию отведено около 25%, практику 55%, повтор и проверку 20%. Делайте перерывы между рабочими блоками.</p></div><div><h3>Один основной стек</h3><p>Основной путь проходит через PostgreSQL, Prefect, FastAPI, один BI, scikit-learn и RAG. Airflow, другие BI и нейросети сравнивайте на тех же данных. Пример Django доступен в модуле API для справки.</p></div><div><h3>Каждый пятый день</h3><p>Практикум собирает результат четырёх уроков. В нём есть порядок действий, ожидаемые числа и вопрос для ревью. Результат практикума становится входом следующего этапа.</p></div></div></section>
+    <section class="section"><div class="section-heading"><div><span class="kicker">ПРОГРАММА</span><h2>Программа по вашему графику</h2></div><p>11 этапов до 26 декабря и отдельный блок защиты. <a href="#/requirements">Сверить с требованиями к роли</a></p></div><label class="searchbox"><span>Поиск по урокам, объяснениям и коду</span><input id="course-search" type="search" placeholder="Например: traceback, SCD2, OData, Битрикс24…"></label><div id="search-results" class="search-results" aria-live="polite"></div><div class="track-grid" id="modules-grid">${C.modules.map((m,i)=>`<a class="track-card" href="#/module/${m.id}"><span class="track-card-top">${m.extension?'ЗАЩИТА':'ЭТАП '+String(i+1).padStart(2,'0')}<span>↗</span></span><strong>${esc(C.guideModules[m.id].title)}</strong><p>${esc(m.title)}</p><span class="track-card-bottom">${esc(C.guideModules[m.id].milestone)}</span></a>`).join('')}</div></section>`;
     $('course-search').addEventListener('input', event=> {
       const query = event.target.value.trim().toLocaleLowerCase('ru');
       $('modules-grid').hidden = !!query;
       if(!query) { $('search-results').innerHTML=''; return; }
-      const found = C.lessons.filter(l => JSON.stringify([l, C.reviews[l.module].lesson===l.id ? C.reviews[l.module] : null]).toLocaleLowerCase('ru').includes(query));
+      const found = C.lessons.filter(l => JSON.stringify([C.guide[l.id], l]).toLocaleLowerCase('ru').includes(query));
       $('search-results').innerHTML = `<p>Найдено уроков: ${found.length}</p>${found.map(card).join('')}`;
     });
   }
@@ -85,7 +86,23 @@
     const review = C.reviews[id];
     const extras = C.lessons.filter(l=>l.module===id && l.companionFor);
     $('breadcrumbs').innerHTML = `<a href="#/">Программа</a> / ${esc(m.title)}`;
-    $('main').innerHTML = pageHeader(`ЭТАП ${index+1} / 12 · ДНИ ${index*5+1}–${index*5+5}`,m.title,m.subtitle)+`<div class="content-narrow"><div class="callout"><strong>Результат этапа</strong><p>${esc(m.outcome)}. Четыре дня изучения и один день самостоятельного практикума. Часы и даты смотрите в расписании.</p></div>${mainLessons.filter(l=>l.module===id).map(card).join('')}<section class="article-section"><h2>Разбор кода для тимлида</h2><p>${esc(review.read)}</p><div class="toolbar">${lessonLink(review.lesson)}${review.file?`<a href="${esc(review.file[0])}">${esc(review.file[1])}</a>`:''}</div><details class="review-answer"><summary>${esc(review.question)}</summary><p>${esc(review.answer)}</p></details></section>${extras.length?`<section class="article-section"><h2>${id==='dwh'?'SQL-практика по темам этапа':'Дополнительное чтение'}</h2>${extras.map(card).join('')}</section>`:''}<section class="gate-check"><span class="section-number">ДЕНЬ ${index*5+5} / ПРАКТИКУМ</span><h2>Соберите и проверьте</h2><p>${esc(m.gate)}</p><p><strong>Сохраните:</strong> ${esc(m.evidence)}.</p>${id==='dwh' && state.gates.sql?`<p>Сохранённая отметка прежнего SQL-практикума — ${esc(state.gates.sql)}.</p>`:''}<label>Состояние практикума <select id="gate-status">${statuses.map(s=>`<option ${state.gates[id]===s?'selected':''}>${s}</option>`).join('')}</select></label><p id="gate-save" aria-live="polite"></p></section><nav class="pager">${index?`<a href="#/module/${C.modules[index-1].id}">← Предыдущий этап</a>`:'<a href="#/">← Программа</a>'}${C.modules[index+1]?`<a href="#/module/${C.modules[index+1].id}">Следующий этап →</a>`:'<a href="#/project">Итоговый проект →</a>'}</nav></div>`;
+    const guide = C.guideModules[id];
+    $('main').innerHTML = pageHeader(`ЭТАП ${index+1} · ДНИ ${index*5+1}–${index*5+5}`,guide.title,guide.question)+`<div class="content-narrow">
+      <section class="callout"><strong>На чём продолжаем</strong><p>${esc(guide.input)}</p><strong>Результат этапа</strong><p>${esc(guide.milestone)}</p></section>
+      <h2>Уроки по порядку</h2>
+      ${mainLessons.filter(l=>l.module===id).map(card).join('')}
+      ${extras.length?`<section class="article-section"><h2>${id==='dwh'?'Упражнения по SQL':'Для справки'}</h2>${extras.map(card).join('')}</section>`:''}
+      <section class="gate-check"><span class="section-number">ДЕНЬ ${index*5+5} · ПРАКТИКУМ</span>
+        <h2>Соберите результат этапа</h2>${list(guide.practice,'ol','steps')}
+        <p><strong>Как проверить.</strong> ${esc(guide.check)}</p>
+        <nav class="guide-files" aria-label="Файлы этапа">${guide.files.map(([href,label])=>`<a href="${esc(href)}">${esc(label)}</a>`).join('')}</nav>
+        <h3>Вопрос тимлиду на ревью</h3>
+        <p>${esc(review.question)}</p><details class="review-answer"><summary>Пример ответа</summary><p>${esc(review.answer)}</p></details>
+        ${id==='dwh' && state.gates.sql?`<p>Сохранённая отметка прежнего SQL-практикума — ${esc(state.gates.sql)}.</p>`:''}
+        <label>Состояние практикума <select id="gate-status">${statuses.map(s=>`<option ${state.gates[id]===s?'selected':''}>${s}</option>`).join('')}</select></label><p id="gate-save" aria-live="polite"></p>
+      </section>
+      <nav class="pager">${index?`<a href="#/module/${C.modules[index-1].id}">← Предыдущий этап</a>`:'<a href="#/">← Программа</a>'}${C.modules[index+1]?`<a href="#/module/${C.modules[index+1].id}">Следующий этап →</a>`:'<a href="#/project">Итоговый проект →</a>'}</nav>
+    </div>`;
     $('gate-status').addEventListener('change',e=>{$('gate-save').textContent=setStatus(id,e.target.value,true)?'Сохранено.':storageWarning;});
   }
   function lessonPage(id) {
@@ -94,18 +111,60 @@
     const prev = l.companionFor ? lessons.get(l.companionFor) : mainLessons[index-1];
     const next = l.companionFor || mainLessons[index+1]?.module!==m.id ? null : mainLessons[index+1];
     const day = C.buildSchedule(state.settings).find(d=>d.lesson===(l.companionFor || id));
-    const review = C.reviews[m.id];
-    $('breadcrumbs').innerHTML = `<a href="#/">Программа</a> / <a href="#/module/${m.id}">${esc(m.title)}</a> / ${esc(l.title)}`;
-    $('main').innerHTML = pageHeader(`${l.companionFor?'К УРОКУ':'УРОК '+(index+1)+' / '+mainLessons.length} · ЭТАП ${C.modules.indexOf(m)+1}`,l.title,l.summary)+`<article class="article"><div class="meta-pills">${l.companionFor?`<span>К дню ${day.day} · ${dateText(day.date)}</span>`:`<span>День ${day.day} · ${dateText(day.date)}</span><span>${day.hours} ч по плану</span>`}</div><div class="callout"><strong>Результат урока</strong><p>${esc(l.result)}.</p><p>Сначала объясните идею своими словами, затем выполните пример и самостоятельную работу. ${prev?`Опора: <a href="#/lesson/${prev.id}">${esc(prev.title)}</a>.`:'Предскажите вывод до запуска.'}</p></div><nav class="lesson-toc" aria-label="Содержание урока"><a href="#theory" data-jump="theory">Теория</a><a href="#example" data-jump="example">Пример</a><a href="#practice" data-jump="practice">Практика</a><a href="#criteria" data-jump="criteria">Критерии</a><a href="#selfcheck" data-jump="selfcheck">Самопроверка</a></nav>
-    <section class="article-section" id="theory"><span class="section-number">01 / ОБЪЯСНЕНИЕ</span><h2>Разберитесь в устройстве</h2>${l.theory.map(([title,p])=>`<h3>${esc(title)}</h3><p>${esc(p)}</p>`).join('')}</section>
-    <section class="article-section" id="example"><span class="section-number">02 / ПРИМЕР</span><h2>Код и разбор</h2><div class="codebox"><div class="codebar"><span>${esc(l.code.filename)}</span><button id="copy-code" type="button">Копировать код</button></div><pre><code>${esc(l.code.text)}</code></pre></div><p class="code-note">${l.code.runnable?'Самостоятельный минимальный пример. Установите указанные зависимости в учебное окружение.':'Фрагмент, схема или шаблон: проверьте условия и реализуйте зависимости, указанные в названии и комментариях.'}</p>${list(l.walkthrough,'ol','steps')}<div class="callout"><strong>Как прочитать этот пример</strong><p>Найдите вход и первую исполняемую операцию. Проследите один пример до выхода. Отметьте смену формы данных, внешние эффекты и место ошибки. Запишите результат до запуска и сравните после.</p>${review.lesson===id?`<p>${esc(review.read)}</p><details class="review-answer"><summary>${esc(review.question)}</summary><p>${esc(review.answer)}</p></details>`:''}${C.companions(id).map(item=>`<p>${lessonLink(item.id)}</p>`).join('')}</div><p id="copy-status" class="code-note" aria-live="polite"></p></section>
-    <section class="article-section practice" id="practice"><span class="section-number">03 / САМОСТОЯТЕЛЬНАЯ РАБОТА</span><h2>Сделайте на своём проекте</h2>${list(l.practice,'ol','steps')}<details class="reveal"><summary>Ориентир решения — откройте после попытки</summary><p>${esc(l.solution)}</p></details><label for="lesson-note">Решение, выводы и ссылка на артефакт</label><textarea id="lesson-note" rows="8" placeholder="Что реализовали? Как запускали? Какие результаты и ограничения?">${esc(state.notes[id]||'')}</textarea><small id="note-status" aria-live="polite">Заметка сохраняется при вводе в этом браузере.</small></section>
-    <section class="article-section" id="criteria"><span class="section-number">04 / ПРИЁМКА</span><h2>Проверьте результат</h2>${list(l.criteria,'ul','checklist')}</section>
-    <section class="article-section"><span class="section-number">05 / ОШИБКИ</span><h2>На что обратить внимание</h2>${list(l.pitfalls,'ul','pitfalls')}</section>
-    <section class="article-section" id="selfcheck"><span class="section-number">06 / САМОПРОВЕРКА</span><h2>Ответьте без подсказки</h2>${l.questions.map(([q,a])=>`<details class="review-answer"><summary>${esc(q)}</summary><p>${esc(a)}</p></details>`).join('')}</section>
-    <section class="article-section"><span class="section-number">07 / ДОКУМЕНТАЦИЯ</span><h2>Официальные источники</h2><p>Материал курса самодостаточен для начала практики. По ссылкам проверяйте API установленной версии и углубляйте конкретный вопрос.</p>${sourceList(l.sources)}</section>
-    <section class="article-section completion"><h2>Практика прошла проверку?</h2><p>Отметка отражает вашу проверку критериев. Её можно снять. Excel и браузер ведут прогресс независимо.</p><div class="toolbar"><button id="complete-lesson" class="button primary" aria-pressed="${state.completed.includes(id)}">${state.completed.includes(id)?'✓ Пройдено — снять отметку':'Отметить урок как пройденный'}</button><a class="button secondary" href="#/schedule">К расписанию</a></div><p id="completion-status" class="status-message" aria-live="polite"></p></section>
-    <nav class="pager">${prev?`<a href="#/lesson/${prev.id}">← ${esc(prev.title)}</a>`:'<a href="#/">← Программа</a>'}${next?`<a href="#/lesson/${next.id}">${esc(next.title)} →</a>`:`<a href="#/module/${m.id}">К практикуму этапа →</a>`}</nav></article>`;
+    const guide = C.guide[id];
+    const stage = C.guideModules[m.id];
+    $('breadcrumbs').innerHTML = `<a href="#/">Программа</a> / <a href="#/module/${m.id}">${esc(m.title)}</a> / ${esc(guide.title)}`;
+    $('main').innerHTML = pageHeader(l.companionFor?'ДОПОЛНИТЕЛЬНЫЙ УРОК':`УРОК ${index+1} · ЭТАП ${C.modules.indexOf(m)+1}`,guide.title,guide.question)+`<article class="article">
+    <div class="meta-pills"><span>${l.companionFor?'К дню':'День'} ${day.day} · ${dateText(day.date)}</span></div>
+    <nav class="lesson-toc" aria-label="Содержание урока">
+      <a href="#theory" data-jump="theory">Понятия</a>
+      <a href="#example" data-jump="example">Разбор примера</a>
+      <a href="#practice" data-jump="practice">Задание</a>
+      <a href="#more" data-jump="more">Углубление</a>
+    </nav>
+    <section class="article-section" id="theory"><h2>Как это устроено</h2>
+      ${guide.concepts.map(([title,body])=>`<h3>${esc(title)}</h3><p>${esc(body)}</p>`).join('')}
+    </section>
+    <section class="article-section" id="example"><h2>Разбор на отправлениях</h2>
+      <div class="codebox guide-example"><div class="codebar"><span>Пример</span><button id="copy-example" type="button">Копировать</button></div><pre><code>${esc(guide.example)}</code></pre></div>
+      <p>${esc(guide.trace)}</p>
+      <p id="example-copy-status" class="code-note" aria-live="polite"></p>
+      ${stage.files.map(([href,label])=>`<a class="guide-file" href="${esc(href)}">${esc(label)}</a>`).join('')}
+    </section>
+    <section class="article-section practice" id="practice"><h2>Попробуйте сами</h2>
+      <p>${esc(guide.task)}</p>
+      <details class="reveal"><summary>Разбор решения</summary><p>${esc(guide.answer)}</p></details>
+      <label for="lesson-note">Ваш ход решения или замечание к коду</label>
+      <textarea id="lesson-note" rows="6" placeholder="Что происходит на входе, в коде и на выходе?">${esc(state.notes[id]||'')}</textarea>
+      <small id="note-status" aria-live="polite">Заметка сохраняется в этом браузере.</small>
+    </section>
+    ${C.companions(id).length ? `<section class="article-section"><h2>Связанные уроки</h2>${C.companions(id).map(item=>`<p>${lessonLink(item.id)}</p>`).join('')}</section>` : ''}
+    <section class="article-section" id="more">
+      <details class="guide-extra">
+        <summary>Углубление · ${esc(l.title)}</summary>
+        <p>Здесь дополнительный пример для чтения кода и сравнения подходов. В некоторых задачах используются продажи и складские данные.</p>
+        ${l.theory.map(([title,body])=>`<h3>${esc(title)}</h3><p>${esc(body)}</p>`).join('')}
+        <div class="codebox"><div class="codebar"><span>${esc(l.code.filename)}</span><button id="copy-code" type="button">Копировать код</button></div><pre><code>${esc(l.code.text)}</code></pre></div>
+        <p class="code-note">${l.code.runnable?'Пример для отдельного запуска. Зависимости и условия указаны рядом с кодом.':'Фрагмент или схема для разбора.'}</p>
+        ${list(l.walkthrough,'ol','steps')}
+        <p id="copy-status" class="code-note" aria-live="polite"></p>
+        <h3>Дополнительная практика</h3>${list(l.practice,'ol','steps')}
+        <p>${esc(l.solution)}</p>
+        <h3>Что проверить</h3>${list(l.criteria,'ul','checklist')}
+        <h3>Частые ошибки</h3>${list(l.pitfalls)}
+        ${l.questions.map(([q,a])=>`<details class="review-answer"><summary>${esc(q)}</summary><p>${esc(a)}</p></details>`).join('')}
+      </details>
+      <details class="guide-extra">
+        <summary>Курсы и официальные справочники</summary>
+        <p>Ссылки на главы по теме урока, где можно углубиться в устройство технологии и проверить синтаксис.</p>
+        ${sourceList([...new Set([...(guide.sources || []),...l.sources])])}
+      </details>
+    </section>
+    <section class="article-section completion">
+      <div class="toolbar"><button id="complete-lesson" class="button primary" aria-pressed="${state.completed.includes(id)}">${state.completed.includes(id)?'✓ Пройдено — снять отметку':'Отметить урок как пройденный'}</button><a class="button secondary" href="#/schedule">К расписанию</a></div>
+      <p id="completion-status" class="status-message" aria-live="polite"></p>
+    </section>
+    <nav class="pager">${prev?`<a href="#/lesson/${prev.id}">← ${esc(C.guide[prev.id].title)}</a>`:'<a href="#/">← Программа</a>'}${next?`<a href="#/lesson/${next.id}">${esc(C.guide[next.id].title)} →</a>`:`<a href="#/module/${m.id}">К практикуму этапа →</a>`}</nav></article>`;
     document.querySelectorAll('[data-jump]').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();$(a.dataset.jump).scrollIntoView({behavior:'smooth'});}));
     $('lesson-note').addEventListener('input',e=>{state.notes[id]=e.target.value; $('note-status').textContent=save()?'Сохранено в этом браузере.':storageWarning;});
     $('complete-lesson').addEventListener('click',()=>{
@@ -114,9 +173,17 @@
       $('complete-lesson').setAttribute('aria-pressed',String(done)); nav(l.module);
       $('completion-status').textContent=saved?'':storageWarning;
     });
-    $('copy-code').addEventListener('click',async()=>{
-      try {await navigator.clipboard.writeText(l.code.text);$('copy-status').textContent='Код скопирован.';}
-      catch {$('copy-status').textContent='Автоматическое копирование недоступно. Выделите код и скопируйте вручную.';}
+    copyButton('copy-example', 'example-copy-status', guide.example);
+    copyButton('copy-code', 'copy-status', l.code.text);
+  }
+  function copyButton(button, status, value) {
+    $(button).addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(value);
+        $(status).textContent = 'Скопировано.';
+      } catch {
+        $(status).textContent = 'Выделите текст примера и скопируйте вручную.';
+      }
     });
   }
   function schedulePage() {
@@ -125,7 +192,7 @@
     $('breadcrumbs').innerHTML='<a href="#/">Программа</a> / Расписание';
     $('main').innerHTML=pageHeader('ПЕРСОНАЛЬНЫЙ ПЛАН','Расписание обучения','Четыре основных урока и практикум на каждый этап. SQL встроен в дни DWH. Пять дней защиты добавлены после этапов из вашего графика.')+`<div class="wide-content"><div class="toolbar"><a class="button primary" href="${xlsxLink}" download>Скачать Excel ↗</a><a class="button secondary" href="#/project">Лабораторный комплект</a></div><div class="callout"><strong>Как распределять день</strong><p>Теория ≈25%, самостоятельная работа ≈55%, повтор и проверка ≈20%. В дополнительные часы: расширьте тестовый набор, разберите документацию и выполните углублённые задания. Перерывы планируйте отдельно. Выходные 4 часа — редактируемое допущение.</p><p>Изменения в браузере не меняют скачанный Excel. Для Excel используйте его поля настроек и ручные поправки.</p></div><form id="schedule-settings" class="settings"><label>Начало<input type="date" name="start" required value="${esc(state.settings.start)}"></label><label>Будни, ч<input type="number" min="0" max="16" step="0.5" name="weekdayHours" required value="${state.settings.weekdayHours}"></label><label>Выходные, ч<input type="number" min="0" max="16" step="0.5" name="weekendHours" required value="${state.settings.weekendHours}"></label><button class="button primary" type="submit">Применить</button></form><p class="schedule-summary">${dateText(days[0].date)} — ${dateText(planEnd)} по графику · защита с ${dateText(days.find(d=>d.extension).date)} по ${dateText(days.at(-1).date)} · ${hours} ч всего.</p><p id="schedule-message" class="status-message" aria-live="polite">${days.at(-1).date>C.deadline?'При этом начале 60-дневный маршрут выходит за дедлайн 31.12.2026. Сократите объём или перенесите начало.':''}</p><div class="table-scroll"><table class="schedule-table"><thead><tr><th>День</th><th>Дата</th><th>Тема и работа</th><th>Теория</th><th>Практика</th><th>Повтор</th><th>Итого</th><th>Состояние</th></tr></thead><tbody>${days.map(d=>{
       const status=d.lesson?(state.lessonStatus[d.lesson]||'Не начато'):(state.gates[d.module]||'Не начато');
-      return `<tr class="${d.lesson?'':'gate'}"><td>${d.day}</td><td class="date-cell">${dateText(d.date)}<br>${dayText(d.date)}</td><td><a href="${d.lesson?'#/lesson/'+d.lesson:'#/module/'+d.module}">${esc(d.title)}</a>${d.extension?'<br><small>Блок защиты</small>':''}${d.module==='dwh' && d.companions.length?`<div>${d.companions.map(lessonLink).join(' · ')}</div>`:''}<details><summary>Задание и результат</summary><p>${esc(d.task)}</p><p><b>Сохранить:</b> ${esc(d.result)}.</p></details></td><td>${d.theory} ч</td><td>${d.practice} ч</td><td>${d.review} ч</td><td>${d.hours} ч</td><td><label><span class="sr-only">Состояние дня ${d.day}</span><select data-day-id="${d.lesson||d.module}" data-gate="${!d.lesson}">${statuses.map(s=>`<option ${s===status?'selected':''}>${s}</option>`).join('')}</select></label></td></tr>`;
+      return `<tr class="${d.lesson?'':'gate'}"><td>${d.day}</td><td class="date-cell">${dateText(d.date)}<br>${dayText(d.date)}</td><td><a href="${d.lesson?'#/lesson/'+d.lesson:'#/module/'+d.module}">${esc(d.title)}</a>${d.extension?'<br><small>Блок защиты</small>':''}${d.module==='dwh' && d.companions.length?`<div>${d.companions.map(lessonLink).join(' · ')}</div>`:''}<details><summary>Задание и ориентир</summary><p>${esc(d.task)}</p><p><strong>${d.lesson?'Разбор примера.':'Результат этапа.'}</strong> ${esc(d.result)}</p></details></td><td>${d.theory} ч</td><td>${d.practice} ч</td><td>${d.review} ч</td><td>${d.hours} ч</td><td><label><span class="sr-only">Состояние дня ${d.day}</span><select data-day-id="${d.lesson||d.module}" data-gate="${!d.lesson}">${statuses.map(s=>`<option ${s===status?'selected':''}>${s}</option>`).join('')}</select></label></td></tr>`;
     }).join('')}</tbody></table></div></div>`;
     $('schedule-settings').addEventListener('submit',e=>{
       e.preventDefault();const fields=new FormData(e.target);
@@ -140,11 +207,21 @@
   }
   function projectPage() {
     $('breadcrumbs').innerHTML='<a href="#/">Программа</a> / Проект';
-    $('main').innerHTML=pageHeader('СКВОЗНАЯ ПРАКТИКА','Учебная Data/AI-платформа','Реализуйте путь данных торговой компании и соберите портфолио, которое можно запустить и проверить.')+`<article class="article"><div class="callout"><strong>Кейс</strong><p>На синтетических данных двух организаций постройте прототип BI для франчайзи СДЭК и AI для ЛК консалтинга. 1С владеет хозяйственными событиями, Битрикс24 даёт контекст сделок, ЛК принимает обращения. Внешний пользователь видит данные своей организации, внутренние роли получают согласованный охват.</p></div><div class="flow-diagram" aria-label="Поток проекта"><div><strong>1. Источник</strong>Учебная 1С, Битрикс24 и ЛК. Схемы источников связаны через проверенные соответствия организаций.</div><div><strong>2. Обработка</strong>Python, pandas/Polars, SQLAlchemy, Prefect/Airflow.</div><div><strong>3. Хранилище</strong>Raw, staging, core, SCD2 и mart в PostgreSQL.</div><div><strong>4. Доступ</strong>FastAPI и Pydantic. Права организации, контракты ЛК и фоновые задания.</div><div><strong>5. Аналитика</strong>Один BI, пилот для 3–5 франчайзи, классификация обращений, сравнение с baseline.</div><div><strong>6. Знания</strong>Корпус, embeddings, vector store, LangChain/LlamaIndex.</div></div>
-    <section class="article-section"><h2>Готовый лабораторный комплект</h2><p>В репозитории есть генератор синтетических данных, mock HTTP-сервиса, SQLite-пример идемпотентной загрузки и DDL для переноса в PostgreSQL. Это рабочая стартовая точка. Слои, BI, API и модели вы развиваете по заданиям курса.</p>${list(['Откройте терминал в data-ai/lab и выполните python generate_data.py.', 'Проверьте локальный ETL: python pipeline.py --db training.sqlite. Повторите и сравните итог.', 'Запустите источник: python mock_onec.py --port 8011. Он имитирует custom feed, а не стандартный OData.', 'Читайте lab/README.md: там есть команды, контрольные суммы, ошибки и границы примера.'],'ol','steps')}<div class="toolbar"><a class="button primary" href="lab/README.md">Инструкция лаборатории ↗</a><a class="button secondary" href="lab/schema_postgres.sql" download>DDL PostgreSQL</a></div></section>
-    <section class="article-section"><h2>Что собрать к защите</h2><p>Подготовьте архитектурный пакет, паспорт BI-пилота и план команды. <a href="#/requirements">Критерии из заявки на роль</a></p>${list(C.modules.map((m,i)=>`${String(i+1).padStart(2,'0')}. ${m.title}: ${m.evidence}.`))}</section>
-    <section class="article-section"><h2>Как проверять готовность</h2>${list(['Запуск из чистой среды по README и зафиксированным версиям.', 'Суммы совпадают после первой загрузки, повтора, возврата, исправления и восстановления.', 'Чужая организация недоступна в API, jobs, BI и RAG.', 'Baseline и модели оцениваются на честном holdout с известной доступностью признаков.', 'RAG показывает проверенные источники, отказывается без данных и удаляет старые документы.', 'Каждое непроверенное свойство реальной 1С, АТК или серверного BI отмечено явно.'],'ul','checklist')}</section>
-    <section class="article-section"><h2>Если база знаний пока слабее</h2><p>Сначала доведите до результата Python → SQL → DWH → 1С-контракт → ETL → API → один BI. Для AI сохраните отдельные лабораторные, не подключая непроверенные модели к бизнес-решениям. Используйте задания как продолжение после дедлайна. На интенсиве не пытайтесь одновременно вводить все альтернативы в основную архитектуру.</p></section><div class="toolbar"><a class="button primary" href="#/lesson/final-defense">Сценарий итоговой защиты →</a></div></article>`;
+    $('main').innerHTML=pageHeader('СКВОЗНОЙ ПРОЕКТ','Путь одного отправления','На примере двух вымышленных организаций соберём контур доставки, отчёт и поддержку для кабинета франчайзи.')+`<article class="article">
+      <section class="article-section"><h2>Что должен увидеть пользователь</h2><p>Анна работает в компании «Север». Она открывает кабинет, чтобы узнать, сколько отправлений за 2 ноября доставлено. Если возникает вопрос, кабинет может предложить очередь для обращения или найти объяснение в регламенте её организации.</p>
+      <div class="table-scroll"><table class="schedule-table case-table"><thead><tr><th scope="col">Организация</th><th scope="col">Номер</th><th scope="col">Статус первой версии</th></tr></thead><tbody><tr><td>Север (north)</td><td>0017</td><td>В пути</td></tr><tr><td>Север (north)</td><td>0018</td><td>Доставлено</td></tr><tr><td>Волга (volga)</td><td>0017</td><td>Доставлено</td></tr></tbody></table></div>
+      <p>У «Севера» поначалу доставлено одно из двух отправлений. Источник присылает новую версию статуса north/0017. После неё доставлены оба. Повтор пакета оставляет итог прежним. Одинаковый номер в «Волге» обозначает другое отправление.</p></section>
+      <section class="article-section"><h2>Как меняется представление данных</h2>
+      ${list(['Выгрузка хранит строки источника. Python читает поля и проверяет формат, ключ, статус и версию.', 'База хранит актуальную запись на отправление. SQL собирает по дням и организациям количество отправленных и доставленных.', 'Оркестратор запускает обновление и помогает восстановиться. FastAPI и BI получают согласованный отчёт. Проверка роли ограничивает доступ организацией.', 'Кабинет отдельно обрабатывает обращения. Для подсказки очереди он сравнивает правила с моделью, а для ответа по регламенту сначала ищет разрешённый источник.'],'ol','steps')}
+      </section>
+      <section class="article-section"><h2>Запустите сквозной пример</h2><p>Откройте терминал в корне проекта. Для этой команды достаточно установленного Python.</p>
+      <div class="codebox"><pre><code>python data-ai/lab/shipment_portal.py</code></pre></div>
+      <p>В выводе увидите первый отчёт 1 из 2, обновление до 2 из 2, ноль изменений при повторе и отказ для чужой организации. Затем программа покажет правило выбора очереди, найденный документ и вопрос, для которого источника нет.</p>
+      <p>В лаборатории работают запись в SQLite, сводка, проверка организации, правила маршрутизации и поиск по словам. В уроках вы по шагам добавляете PostgreSQL, оркестратор, FastAPI, BI, классификатор и генерацию ответов.</p>
+      <div class="toolbar"><a class="button primary" href="lab/README.md">Инструкция и команды</a><a class="button secondary" href="#/lesson/python-values">К первому уроку</a></div></section>
+      <section class="article-section"><h2>Что останется после каждого этапа</h2><ol class="steps guide-map">${C.modules.map(m=>`<li><a href="#/module/${m.id}">${esc(C.guideModules[m.id].title)}</a><p>${esc(C.guideModules[m.id].milestone)}</p></li>`).join('')}</ol></section>
+      <div class="toolbar"><a class="button primary" href="#/lesson/final-defense">Сценарий итоговой защиты</a><a class="button secondary" href="#/requirements">Требования к тимлиду</a></div>
+    </article>`;
   }
   function requirementsPage() {
     $('breadcrumbs').innerHTML='<a href="#/">Программа</a> / Требования к тимлиду';
@@ -162,21 +239,17 @@
   }
   function resourcesPage() {
     $('breadcrumbs').innerHTML='<a href="#/">Программа</a> / Справочник';
-    const terms = [
-      ['Зерно','Что означает одна строка набора. Все JOIN и агрегаты должны сохранять или явно менять его.'],
-      ['Watermark / checkpoint','Устойчивый указатель уже применённых изменений. Продвигается после успешного commit.'],
-      ['SCD2','Хранение версий измерения с непересекающимися интервалами действия.'],
-      ['Идемпотентность','Повтор одной операции не меняет бизнес-результат второй раз.'],
-      ['CDC','Передача изменений, включая исправления и удаления, с определёнными гарантиями.'],
-      ['Data lineage','Связь результата с источниками, пакетами и правилами преобразования.'],
-      ['Leakage','Информация, которой не должно быть в обучении или признаках в момент решения.'],
-      ['Baseline','Простой контрольный способ, который сложная модель должна обоснованно улучшить.'],
-      ['Embedding','Векторное представление, привязанное к конкретной модели и её версии.'],
-      ['RAG','Поиск источников перед генерацией ответа по найденному контексту.'],
-      ['RPO / RTO','Допустимая потеря данных по времени / допустимое время восстановления.'],
-      ['АТК','Неизвестное обозначение из требований. Нужны точное название, релиз, владелец и метаданные.']
-    ];
-    $('main').innerHTML=pageHeader('ОПОРА ДЛЯ ПРАКТИКИ','Справочник, документы и прогресс','Возвращайтесь к определениям и официальным руководствам. Сохраняйте резервную копию заметок перед сменой браузера.')+`<article class="article"><section class="backup-block"><h2>Резервная копия обучения</h2><p>Копия содержит отметки, заметки и настройки дат этого курса. Импорт объединяет отметки и заменяет только совпавшие заметки данными файла. Excel ведётся отдельно.</p><div class="toolbar"><button class="button primary" id="export-progress">Экспорт JSON</button></div><label for="import-progress">Восстановить из JSON (до 2 МБ)</label><br><input class="file-input" type="file" id="import-progress" accept=".json,application/json"><p id="backup-status" aria-live="polite">${esc(storageWarning)}</p></section><section class="article-section"><h2>Краткие определения</h2><div class="resource-grid">${terms.map(([t,b])=>`<div class="resource-card"><h2>${esc(t)}</h2><p>${esc(b)}</p></div>`).join('')}</div></section><section class="article-section"><h2>Официальные руководства</h2><p>Примеры ориентированы на указанные в уроках линии API. При установке фиксируйте конкретные версии и сверяйте совместимость. Сайт курса не загружает ваши данные и не выполняет Python-код в браузере.</p>${sourceList(Object.keys(C.sources))}</section><section class="article-section"><h2>Шаблон evidence.md</h2><div class="codebox"><pre><code>Требование:
+    const glossary = C.modules.map(module => {
+      const stageLessons = mainLessons.filter(l=>l.module===module.id);
+      const entries = stageLessons.flatMap(l=>[l,...C.companions(l.id)]).map(lesson => {
+        const guide = C.guide[lesson.id];
+        return `<details class="guide-extra"><summary>${esc(guide.title)}</summary>
+          ${guide.concepts.map(([term, explanation])=>`<h3>${esc(term)}</h3><p>${esc(explanation)}</p>`).join('')}
+          <p>${lessonLink(lesson.id)}</p></details>`;
+      }).join('');
+      return `<h3>${esc(module.title)}</h3>${entries}`;
+    }).join('');
+    $('main').innerHTML=pageHeader('ОПОРА ДЛЯ ПРАКТИКИ','Справочник, документы и прогресс','Возвращайтесь к определениям и официальным руководствам. Сохраняйте резервную копию заметок перед сменой браузера.')+`<article class="article"><section class="backup-block"><h2>Резервная копия обучения</h2><p>Копия содержит отметки, заметки и настройки дат этого курса. Импорт объединяет отметки и заменяет только совпавшие заметки данными файла. Excel ведётся отдельно.</p><div class="toolbar"><button class="button primary" id="export-progress">Экспорт JSON</button></div><label for="import-progress">Восстановить из JSON (до 2 МБ)</label><br><input class="file-input" type="file" id="import-progress" accept=".json,application/json"><p id="backup-status" aria-live="polite">${esc(storageWarning)}</p></section><section class="article-section"><h2>Понятия по этапам</h2><p>Откройте нужную тему, чтобы перечитать объяснение и перейти к разбору.</p>${glossary}</section><section class="article-section"><h2>Официальные руководства</h2><p>Примеры ориентированы на указанные в уроках линии API. При установке фиксируйте конкретные версии и сверяйте совместимость. Сайт курса не загружает ваши данные и не выполняет Python-код в браузере.</p>${sourceList(Object.keys(C.sources))}</section><section class="article-section"><h2>Шаблон evidence.md</h2><div class="codebox"><pre><code>Требование:
 Артефакт / версия:
 Команда воспроизведения:
 Входной набор и его версия:
@@ -207,7 +280,7 @@
     const id = kind==='module' && parts[2]==='sql' ? 'dwh' : parts[2]||'';
     const active=kind==='module'?id:kind==='lesson'?lessons.get(id)?.module:kind||'home';nav(active);
     if(!kind)home();else if(kind==='module')modulePage(id);else if(kind==='lesson')lessonPage(id);else if(kind==='schedule')schedulePage();else if(kind==='project')projectPage();else if(kind==='requirements')requirementsPage();else if(kind==='resources')resourcesPage();else notFound();
-    document.title=(kind==='lesson'&&lessons.has(id)?lessons.get(id).title:kind==='module'&&modules.has(id)?modules.get(id).title:'Python для BI & AI Team Lead')+' — практический курс';
+    document.title=(kind==='lesson'&&lessons.has(id)?C.guide[id].title:kind==='module'&&modules.has(id)?C.guideModules[id].title:'Python для BI & AI Team Lead')+' — практический курс';
     $('sidebar').classList.remove('open');$('menu-button').setAttribute('aria-expanded','false');$('main').focus({preventScroll:true});window.scrollTo(0,0);
   }
   $('menu-button').addEventListener('click',()=>{const open=$('sidebar').classList.toggle('open');$('menu-button').setAttribute('aria-expanded',String(open));});
